@@ -59,17 +59,22 @@ export const updateStatus = async (user: User) => {
         let day = 0,
             week = 0,
             mth = 0,
-            year = 0;
+            year = 0,
+            limit = 0;
         if (!dayChange(dateToCheck)) day = user.currentDay;
         if (!weekChange(dateToCheck)) week = user.currentWeek;
-        if (!monthChange(dateToCheck)) mth = user.currentMonth;
         if (!yearChange(dateToCheck)) year = user.currentYear;
+        if (!monthChange(dateToCheck)) {
+            mth = user.currentMonth;
+            limit = user.limit;
+        }
         await db.user.update({
             data: {
                 currentDay: day,
                 currentWeek: week,
                 currentMonth: mth,
                 currentYear: year,
+                limit: limit,
             },
             where: {
                 id: user.id,

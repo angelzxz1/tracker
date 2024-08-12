@@ -50,6 +50,7 @@ export function AddPurchaseForm() {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             setIsLoading(true);
+            console.log(values);
             await axios.post("/api/add-purchase", values);
             setIsLoading(true);
             form.reset();

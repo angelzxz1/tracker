@@ -34,10 +34,13 @@ export async function PUT(req: NextRequest) {
                 ownerId: profile.id,
                 yearId: lastYear.id,
             },
+            orderBy: {
+                createdAt: "desc",
+            },
         });
 
         if (!lastMonth) {
-            lastMonth = await db.monthlySpent.create({
+            await db.monthlySpent.create({
                 data: {
                     amountSpent: 0,
                     currentMonth: new Date().getMonth().toString(),
@@ -47,15 +50,27 @@ export async function PUT(req: NextRequest) {
                 },
             });
         } else {
-            await db.monthlySpent.update({
-                where: {
-                    id: lastMonth.id,
-                    ownerId: profile.id,
-                },
-                data: {
-                    monthlyLimit: parseInt(limit),
-                },
-            });
+            if (parseInt(lastMonth.currentMonth) < new Date().getMonth()) {
+                await db.monthlySpent.create({
+                    data: {
+                        amountSpent: 0,
+                        currentMonth: new Date().getMonth().toString(),
+                        ownerId: profile.id,
+                        monthlyLimit: parseInt(limit),
+                        yearId: lastYear.id,
+                    },
+                });
+            } else {
+                await db.monthlySpent.update({
+                    where: {
+                        id: lastMonth.id,
+                        ownerId: profile.id,
+                    },
+                    data: {
+                        monthlyLimit: parseInt(limit),
+                    },
+                });
+            }
         }
         await db.user.update({
             where: {

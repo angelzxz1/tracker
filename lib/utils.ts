@@ -87,7 +87,7 @@ export const getFullMonthOfTheYear = (month: number): string => {
         "March",
         "April",
         "May",
-        "Jun",
+        "June",
         "July",
         "August",
         "September",

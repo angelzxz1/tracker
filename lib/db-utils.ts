@@ -27,7 +27,7 @@ export const createYear = async (currentYear: string, userId: string) => {
 
 export const findMonth = async (currentMonth: string, yearId: string) => {
     try {
-        return await db.monthlySpent.findUnique({
+        return await db.monthlySpent.findFirst({
             where: {
                 currentMonth,
                 yearId: yearId,
@@ -42,6 +42,7 @@ export const createMonth = async (
     userId: string,
     yearId: string
 ) => {
+    console.log(currentMonth, userId, yearId);
     try {
         return await db.monthlySpent.create({
             data: {
@@ -52,6 +53,7 @@ export const createMonth = async (
             },
         });
     } catch (error) {
+        console.log(error);
         throw new Error("Error creating a new month");
     }
 };

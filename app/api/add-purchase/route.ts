@@ -68,7 +68,13 @@ export async function POST(req: NextRequest) {
         }
         const profile = await currentProfile();
         if (!profile) return new NextResponse("Unauthorized", { status: 401 });
-        const month = await updateUserData(parseInt(amount), profile, dop);
+        const dateOfPurchase = new Date(dop);
+        console.log(dop, dateOfPurchase);
+        const month = await updateUserData(
+            parseInt(amount),
+            profile,
+            dateOfPurchase
+        );
         if (!month)
             return new NextResponse("Something went wrong while updating", {
                 status: 500,
